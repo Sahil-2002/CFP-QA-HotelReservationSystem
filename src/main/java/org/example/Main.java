@@ -79,8 +79,12 @@ public class Main {
         sc.addhotel("Ridgewood");
 
         sc.setregularrates("Lakewood", "Weekday", 110);
-        sc.setregularrates("Bridgewood", "Weekday", 160);
+        sc.setregularrates("Bridgewood", "Weekday", 150);
         sc.setregularrates("Ridgewood", "Weekday", 220);
+
+        sc.setregularrates("Lakewood", "Weekend", 90);
+        sc.setregularrates("Bridgewood", "Weekend", 50);
+        sc.setregularrates("Ridgewood", "Weekend", 150);
 
 
         Hotel lakewood = sc.hotels.get("Lakewood");
