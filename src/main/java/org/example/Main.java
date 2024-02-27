@@ -46,12 +46,6 @@ public void setregularrates(String hotelname , String daytype , int rate){
          hotel.setRegularrates(daytype,rate);
      }
 }
-
-
-
-
-
-
     public static void main(String[] args) {
         System.out.println("Welcome to Hotel Reservation Program ");
 
