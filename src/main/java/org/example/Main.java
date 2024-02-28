@@ -44,7 +44,7 @@ class Hotel {
 public class Main {
 
     Map<String, Hotel> hotels;
-
+    int rating =0;
 
     public Main() {
         this.hotels = new HashMap<>();
@@ -95,6 +95,7 @@ public class Main {
         String cheapestHotel = "";
 
         for (Hotel hotel : hotels.values()) {
+
             int totalRate =0;
             for(LocalDate date = date1; !date.isAfter(date2);date = date.plusDays(1)){
                 if(date.getDayOfWeek()== DayOfWeek.SATURDAY || date.getDayOfWeek()==DayOfWeek.SUNDAY){
@@ -107,10 +108,11 @@ public class Main {
             if (totalRate < minTotalRate) {
                 minTotalRate = totalRate;
                 cheapestHotel = hotel.getname();
+                rating = hotel.getRating();
             }
         }
 
-        return cheapestHotel + " total rates " + minTotalRate;
+        return cheapestHotel + " total rates " + minTotalRate ;
     }
 
     public static void main(String[] args) {
@@ -139,7 +141,7 @@ public class Main {
         String startDate = "2020-09-11";
         String endDate = "2020-09-12";
         String hotel = sc.findCheapestHotel(startDate, endDate);
-        System.out.println(hotel);
+        System.out.println(hotel+" with rating "+ sc.rating);
 
 
     }
