@@ -47,7 +47,7 @@ class Hotel {
 public class Main {
 
     Map<String, Hotel> hotels;
-    int rating =0;
+
 
     public Main() {
         this.hotels = new HashMap<>();
@@ -91,31 +91,59 @@ public class Main {
 
         LocalDate date1 = LocalDate.parse(startDate);
         LocalDate date2 = LocalDate.parse(endDate);
-        int daysDifference = (int) ChronoUnit.DAYS.between(date1, date2);
+        int daysDifference = (int) ChronoUnit.DAYS.between(date1, date2) + 1;
 
         int minTotalRate = Integer.MAX_VALUE;
 
         String cheapestHotel = "";
-
         for (Hotel hotel : hotels.values()) {
 
             int totalRate = 0;
             for (LocalDate date = date1; !date.isAfter(date2); date = date.plusDays(1)) {
                 if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
-                    totalRate = totalRate + hotel.getTotalRate("Weekend", daysDifference);
+                    totalRate += hotel.getTotalRate("Weekend", 1); // Calculate rate for each day
                 } else {
-                    totalRate = totalRate + hotel.getTotalRate("Weekday", daysDifference);
-
+                    totalRate += hotel.getTotalRate("Weekday", 1); // Calculate rate for each day
                 }
             }
             if (totalRate < minTotalRate) {
                 minTotalRate = totalRate;
                 cheapestHotel = hotel.getname();
-                rating = hotel.getRating();
+
             }
         }
 
-        return cheapestHotel + " total rates " + minTotalRate ;
+        return cheapestHotel + " total rates " + minTotalRate;
+    }
+
+    public String bestratinghotel(String startDate, String endDate) {
+        LocalDate date1 = LocalDate.parse(startDate);
+        LocalDate date2 = LocalDate.parse(endDate);
+        int daysDifference = (int) ChronoUnit.DAYS.between(date1, date2) + 1;
+        int maxrating = 0;
+        String BestHotel = "";
+        int bestTotalRate = Integer.MAX_VALUE;
+
+        for (Hotel hotel : hotels.values()) {
+            int totalRate = 0;
+
+            for (LocalDate date = date1; !date.isAfter(date2); date = date.plusDays(1)) {
+                if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                    totalRate = totalRate + hotel.getTotalRate("Weekend", 1);
+                } else {
+                    totalRate = totalRate + hotel.getTotalRate("Weekday", 1);
+
+                }
+            }
+            if (hotel.getRating() > maxrating || (hotel.getRating() == maxrating && totalRate < bestTotalRate)) {
+                maxrating = hotel.getRating();
+                BestHotel = hotel.getname();
+                bestTotalRate = totalRate;
+
+            }
+        }
+        return "The best rated hotel is " + BestHotel + " with rating " + maxrating + " and with total rate " + bestTotalRate;
+
     }
 
     public static void main(String[] args) {
@@ -143,8 +171,8 @@ public class Main {
 
         String startDate = "2020-09-11";
         String endDate = "2020-09-12";
-        String hotel = sc.findCheapestHotel(startDate, endDate);
-        System.out.println(hotel+" with rating "+ sc.rating);
+
+        System.out.println(sc.bestratinghotel(startDate, endDate));
 
 
     }

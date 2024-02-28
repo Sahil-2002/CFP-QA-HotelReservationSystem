@@ -55,7 +55,7 @@ public class MainTest {
     }
 
     @Test//4
-    public void findcheapest(){
+    public void findcheapest() {
         Main sc = new Main();
         sc.addhotel("Lakewood");
         sc.addhotel("Bridgewood");
@@ -72,27 +72,28 @@ public class MainTest {
         String startDate = "2020-09-11";
         String endDate = "2020-09-12";
         String hotel = sc.findCheapestHotel(startDate, endDate);
-        assertEquals("Bridgewood total rates 200",hotel);
+        assertEquals("Bridgewood total rates 200", hotel);
     }
 
     @Test //5
-    public void getrating(){
+    public void getrating() {
         Main sc = new Main();
         sc.addhotel("Lakewood");
         sc.addhotel("Bridgewood");
         sc.addhotel("Ridgewood");
 
-        sc.setRatings("Lakewood",3);
-        sc.setRatings("Bridgewood",4);
-        sc.setRatings("Ridgewood",5);
+        sc.setRatings("Lakewood", 3);
+        sc.setRatings("Bridgewood", 4);
+        sc.setRatings("Ridgewood", 5);
 
-        assertEquals(3,sc.getRating("Lakewood"));
+        assertEquals(3, sc.getRating("Lakewood"));
         assertEquals(4, sc.getRating("Bridgewood"));
-        assertEquals(5,sc.getRating("Ridgewood"));
+        assertEquals(5, sc.getRating("Ridgewood"));
 
     }
+
     @Test //6
-    public void findcheapestbutbestrated(){
+    public void findcheapestbutbestrated() {
         Main sc = new Main();
         sc.addhotel("Lakewood");
         sc.addhotel("Bridgewood");
@@ -106,17 +107,42 @@ public class MainTest {
         sc.setregularrates("Bridgewood", "Weekend", 50);
         sc.setregularrates("Ridgewood", "Weekend", 150);
 
-        sc.setRatings("Lakewood",3);
-        sc.setRatings("Bridgewood",4);
-        sc.setRatings("Ridgewood",5);
+        sc.setRatings("Lakewood", 3);
+        sc.setRatings("Bridgewood", 4);
+        sc.setRatings("Ridgewood", 5);
 
         String startDate = "2020-09-11";
         String endDate = "2020-09-12";
 
         String hotel = sc.findCheapestHotel(startDate, endDate);
-        assertEquals("Bridgewood total rates 200",hotel);
+        assertEquals("Bridgewood total rates 200", hotel);
         assertEquals(4, sc.getRating("Bridgewood"));
 
     }
 
+    @Test//7
+
+    public void findbestrated() {
+        Main sc = new Main();
+        sc.addhotel("Lakewood");
+        sc.addhotel("Bridgewood");
+        sc.addhotel("Ridgewood");
+
+        sc.setregularrates("Lakewood", "Weekday", 110);
+        sc.setregularrates("Bridgewood", "Weekday", 150);
+        sc.setregularrates("Ridgewood", "Weekday", 220);
+
+        sc.setregularrates("Lakewood", "Weekend", 90);
+        sc.setregularrates("Bridgewood", "Weekend", 50);
+        sc.setregularrates("Ridgewood", "Weekend", 150);
+
+        sc.setRatings("Lakewood", 3);
+        sc.setRatings("Bridgewood", 4);
+        sc.setRatings("Ridgewood", 5);
+
+        String startDate = "2020-09-11";
+        String endDate = "2020-09-12";
+        sc.bestratinghotel(startDate, endDate);
+        assertEquals("The best rated hotel is Ridgewood with rating 5 and with total rate 370", sc.bestratinghotel(startDate, endDate));
+    }
 }
