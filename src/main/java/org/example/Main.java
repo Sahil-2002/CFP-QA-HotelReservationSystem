@@ -22,6 +22,10 @@ class Hotel {
 
     }
 
+    public void setrewardrates(String daytype, int rate) {
+        regularrates.put(daytype, rate);
+    }
+
     public void setrating(int rating) {
         this.rating = rating;
     }
@@ -37,6 +41,10 @@ class Hotel {
     public Map<String, Integer> getRegularrates() {
         return regularrates;
 
+    }
+
+    public Map<String, Integer> getrewardrates() {
+        return regularrates;
     }
 
     public int getTotalRate(String dayType, int numDays) {
@@ -62,6 +70,15 @@ public class Main {
         Hotel hotel = hotels.get(hotelname);
         if (hotel != null) {
             hotel.setRegularrates(daytype, rate);
+        } else {
+            System.out.println("hotel " + hotelname + " not found ");
+        }
+    }
+
+    public void setRewardrates(String hotelname, String daytype, int rate) {
+        Hotel hotel = hotels.get(hotelname);
+        if (hotel != null) {
+            hotel.setrewardrates(daytype, rate);
         } else {
             System.out.println("hotel " + hotelname + " not found ");
         }
@@ -162,11 +179,23 @@ public class Main {
         sc.setregularrates("Bridgewood", "Weekend", 50);
         sc.setregularrates("Ridgewood", "Weekend", 150);
 
+        sc.setRewardrates("Lakewood", "Weekday", 80);
+        sc.setRewardrates("Bridgewood", "Weekday", 110);
+        sc.setRewardrates("Ridgewood", "Weekday", 100);
+
+        sc.setRewardrates("Lakewood", "Weekend", 80);
+        sc.setRewardrates("Bridgewood", "Weekend", 50);
+        sc.setRewardrates("Ridgewood", "Weekend", 40);
+
+
         sc.setRatings("Lakewood", 3);
         sc.setRatings("Bridgewood", 4);
         sc.setRatings("Ridgewood", 5);
 
-        System.out.println("Rating for hotel Bridgewood is " + sc.getRating("Bridgewood"));
+        Hotel lakewood = sc.hotels.get("Lakewood");
+        if (lakewood != null) {
+            System.out.println("Reward rate for Lakewood is " + lakewood.getrewardrates().get("Weekday"));
+        }
 
 
         String startDate = "2020-09-11";

@@ -145,4 +145,28 @@ public class MainTest {
         sc.bestratinghotel(startDate, endDate);
         assertEquals("The best rated hotel is Ridgewood with rating 5 and with total rate 370", sc.bestratinghotel(startDate, endDate));
     }
+
+    @Test //8
+    public void rewardrates() {
+        Main sc = new Main();
+        sc.addhotel("Lakewood");
+        sc.addhotel("Bridgewood");
+        sc.addhotel("Ridgewood");
+
+
+        sc.setRewardrates("Lakewood", "Weekday", 80);
+        sc.setRewardrates("Bridgewood", "Weekday", 110);
+        sc.setRewardrates("Ridgewood", "Weekday", 100);
+
+        sc.setRewardrates("Lakewood", "Weekend", 80);
+        sc.setRewardrates("Bridgewood", "Weekend", 50);
+        sc.setRewardrates("Ridgewood", "Weekend", 40);
+
+        Hotel lakewood = sc.hotels.get("Lakewood");
+        assertEquals(80, lakewood.getrewardrates().get("Weekday"));
+        assertEquals(80, lakewood.getrewardrates().get("Weekend"));
+
+
+    }
+
 }
