@@ -1,5 +1,7 @@
 package org.example;
-
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,12 +57,25 @@ public class Main {
     }
 
     public String findCheapestHotel(String startDate, String endDate) {
+
+        LocalDate date1 = LocalDate.parse(startDate);
+        LocalDate date2 = LocalDate.parse(endDate);
+        int daysDifference = (int) ChronoUnit.DAYS.between(date1, date2);
+
         int minTotalRate = Integer.MAX_VALUE;
 
         String cheapestHotel = "";
 
         for (Hotel hotel : hotels.values()) {
-            int totalRate = hotel.getTotalRate("Weekday", 2);
+            int totalRate =0;
+            for(LocalDate date = date1; !date.isAfter(date2);date = date.plusDays(1)){
+                if(date.getDayOfWeek()== DayOfWeek.SATURDAY || date.getDayOfWeek()==DayOfWeek.SUNDAY){
+                    totalRate = totalRate+hotel.getTotalRate("Weekend",daysDifference);
+                }
+                else {
+                    totalRate = totalRate+ hotel.getTotalRate("Weekday",daysDifference);
+                }
+            }
             if (totalRate < minTotalRate) {
                 minTotalRate = totalRate;
                 cheapestHotel = hotel.getname();
@@ -87,13 +102,9 @@ public class Main {
         sc.setregularrates("Ridgewood", "Weekend", 150);
 
 
-        Hotel lakewood = sc.hotels.get("Lakewood");
 
-        if (lakewood != null) {
-            System.out.println("Lakewood Rates for Regular Customers: " + lakewood.getRegularrates());
-        }
-        String startDate = "10sep2020";
-        String endDate = "11sep2020";
+        String startDate = "2020-09-11";
+        String endDate = "2020-09-12";
         String hotel = sc.findCheapestHotel(startDate, endDate);
         System.out.println(hotel);
 

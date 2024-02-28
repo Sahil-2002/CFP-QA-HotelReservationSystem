@@ -31,8 +31,8 @@ public class MainTest {
         sc.setregularrates("Lakewood", "Weekday", 110);
         sc.setregularrates("Bridgewood", "Weekday", 160);
         sc.setregularrates("Ridgewood", "Weekday", 220);
-        String startDate = "10sep2020";
-        String endDate = "11sep2020";
+        String startDate = "2020-09-10";
+        String endDate = "2020-09-11";
         String hotel = sc.findCheapestHotel(startDate, endDate);
         assertEquals("Lakewood total rates 220", hotel);
     }
@@ -52,6 +52,27 @@ public class MainTest {
             assertEquals(90, rate2);
         }
 
+    }
+
+    @Test//4
+    public void findcheapest(){
+        Main sc = new Main();
+        sc.addhotel("Lakewood");
+        sc.addhotel("Bridgewood");
+        sc.addhotel("Ridgewood");
+
+        sc.setregularrates("Lakewood", "Weekday", 110);
+        sc.setregularrates("Bridgewood", "Weekday", 150);
+        sc.setregularrates("Ridgewood", "Weekday", 220);
+
+        sc.setregularrates("Lakewood", "Weekend", 90);
+        sc.setregularrates("Bridgewood", "Weekend", 50);
+        sc.setregularrates("Ridgewood", "Weekend", 150);
+
+        String startDate = "2020-09-11";
+        String endDate = "2020-09-12";
+        String hotel = sc.findCheapestHotel(startDate, endDate);
+        assertEquals("Bridgewood total rates 200",hotel);
     }
 
 }
