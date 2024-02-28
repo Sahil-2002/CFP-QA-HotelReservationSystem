@@ -7,6 +7,7 @@ import java.util.Map;
 
 class Hotel {
     private String name;
+    private int rating;
     private Map<String, Integer> regularrates;
 
     public Hotel(String name) {
@@ -18,6 +19,12 @@ class Hotel {
     public void setRegularrates(String dayytpe, int rate) {
         regularrates.put(dayytpe, rate);
 
+    }
+    public void setrating(int rating){
+        this.rating=rating;
+    }
+    public int getRating(){
+        return rating;
     }
 
     public String getname() {
@@ -38,6 +45,7 @@ public class Main {
 
     Map<String, Hotel> hotels;
 
+
     public Main() {
         this.hotels = new HashMap<>();
 
@@ -54,6 +62,26 @@ public class Main {
         } else {
             System.out.println("hotel " + hotelname + " not found ");
         }
+    }
+    public void setRatings(String hotelname , int rating){
+        Hotel hotel = hotels.get(hotelname);
+        if(hotel!= null){
+            hotel.setrating(rating);
+        }
+        else {
+            System.out.println("Hotel"+hotelname+" not found !");
+        }
+    }
+    public int getRating(String hotelname){
+        Hotel hotel = hotels.get(hotelname);
+        if(hotel!= null){
+           return hotel.getRating();
+        }
+        else {
+            System.out.println("Hotel "+hotelname+" not found ");
+        }
+        return 0;
+
     }
 
     public String findCheapestHotel(String startDate, String endDate) {
@@ -101,6 +129,11 @@ public class Main {
         sc.setregularrates("Bridgewood", "Weekend", 50);
         sc.setregularrates("Ridgewood", "Weekend", 150);
 
+       sc.setRatings("Lakewood",3);
+       sc.setRatings("Bridgewood",4);
+       sc.setRatings("Ridgewood",5);
+
+        System.out.println("Rating for hotel Bridgewood is "+sc.getRating("Bridgewood"));
 
 
         String startDate = "2020-09-11";

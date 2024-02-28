@@ -75,4 +75,21 @@ public class MainTest {
         assertEquals("Bridgewood total rates 200",hotel);
     }
 
+    @Test //5
+    public void getrating(){
+        Main sc = new Main();
+        sc.addhotel("Lakewood");
+        sc.addhotel("Bridgewood");
+        sc.addhotel("Ridgewood");
+
+        sc.setRatings("Lakewood",3);
+        sc.setRatings("Bridgewood",4);
+        sc.setRatings("Ridgewood",5);
+
+        assertEquals(3,sc.getRating("Lakewood"));
+        assertEquals(4, sc.getRating("Bridgewood"));
+        assertEquals(5,sc.getRating("Ridgewood"));
+
+    }
+
 }
