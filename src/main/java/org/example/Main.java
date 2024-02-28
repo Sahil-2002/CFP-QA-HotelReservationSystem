@@ -1,4 +1,5 @@
 package org.example;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -20,10 +21,12 @@ class Hotel {
         regularrates.put(dayytpe, rate);
 
     }
-    public void setrating(int rating){
-        this.rating=rating;
+
+    public void setrating(int rating) {
+        this.rating = rating;
     }
-    public int getRating(){
+
+    public int getRating() {
         return rating;
     }
 
@@ -63,22 +66,22 @@ public class Main {
             System.out.println("hotel " + hotelname + " not found ");
         }
     }
-    public void setRatings(String hotelname , int rating){
+
+    public void setRatings(String hotelname, int rating) {
         Hotel hotel = hotels.get(hotelname);
-        if(hotel!= null){
+        if (hotel != null) {
             hotel.setrating(rating);
-        }
-        else {
-            System.out.println("Hotel"+hotelname+" not found !");
+        } else {
+            System.out.println("Hotel" + hotelname + " not found !");
         }
     }
-    public int getRating(String hotelname){
+
+    public int getRating(String hotelname) {
         Hotel hotel = hotels.get(hotelname);
-        if(hotel!= null){
-           return hotel.getRating();
-        }
-        else {
-            System.out.println("Hotel "+hotelname+" not found ");
+        if (hotel != null) {
+            return hotel.getRating();
+        } else {
+            System.out.println("Hotel " + hotelname + " not found ");
         }
         return 0;
 
@@ -95,13 +98,12 @@ public class Main {
         String cheapestHotel = "";
 
         for (Hotel hotel : hotels.values()) {
-            int totalRate =0;
-            for(LocalDate date = date1; !date.isAfter(date2);date = date.plusDays(1)){
-                if(date.getDayOfWeek()== DayOfWeek.SATURDAY || date.getDayOfWeek()==DayOfWeek.SUNDAY){
-                    totalRate = totalRate+hotel.getTotalRate("Weekend",daysDifference);
-                }
-                else {
-                    totalRate = totalRate+ hotel.getTotalRate("Weekday",daysDifference);
+            int totalRate = 0;
+            for (LocalDate date = date1; !date.isAfter(date2); date = date.plusDays(1)) {
+                if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                    totalRate = totalRate + hotel.getTotalRate("Weekend", daysDifference);
+                } else {
+                    totalRate = totalRate + hotel.getTotalRate("Weekday", daysDifference);
                 }
             }
             if (totalRate < minTotalRate) {
@@ -129,11 +131,11 @@ public class Main {
         sc.setregularrates("Bridgewood", "Weekend", 50);
         sc.setregularrates("Ridgewood", "Weekend", 150);
 
-       sc.setRatings("Lakewood",3);
-       sc.setRatings("Bridgewood",4);
-       sc.setRatings("Ridgewood",5);
+        sc.setRatings("Lakewood", 3);
+        sc.setRatings("Bridgewood", 4);
+        sc.setRatings("Ridgewood", 5);
 
-        System.out.println("Rating for hotel Bridgewood is "+sc.getRating("Bridgewood"));
+        System.out.println("Rating for hotel Bridgewood is " + sc.getRating("Bridgewood"));
 
 
         String startDate = "2020-09-11";
