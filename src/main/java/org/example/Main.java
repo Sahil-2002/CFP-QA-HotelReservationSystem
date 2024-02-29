@@ -1,5 +1,7 @@
 package org.example;
 
+import java.time.temporal.ChronoUnit;
+import java.util.stream.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -11,10 +13,11 @@ class Hotel {
     private int rating;
     private Map<String, Integer> regularrates;
     private Map<String, Integer> rewardrates;
+
     public Hotel(String name) {
         this.name = name;
         this.regularrates = new HashMap<>();
-        this.rewardrates= new HashMap<>();
+        this.rewardrates = new HashMap<>();
 
     }
 
@@ -50,7 +53,7 @@ class Hotel {
 
 
     public int getTotalRate(String dayType, int numDays, boolean isReward) {
-        Map<String, Integer> rates = isReward? rewardrates:regularrates;
+        Map<String, Integer> rates = isReward ? rewardrates : regularrates;
         return rates.getOrDefault(dayType, 0) * numDays;
     }
 }
@@ -58,7 +61,6 @@ class Hotel {
 public class Main {
 
     Map<String, Hotel> hotels;
-
 
 
     public Main() {
@@ -84,7 +86,7 @@ public class Main {
         if (hotel != null) {
             hotel.setrewardrates(daytype, rate);
         } else {
-            throw  new IllegalArgumentException("hotel " + hotelname + " not found ");
+            throw new IllegalArgumentException("hotel " + hotelname + " not found ");
         }
     }
 
@@ -93,7 +95,7 @@ public class Main {
         if (hotel != null) {
             hotel.setrating(rating);
         } else {
-            throw  new IllegalArgumentException("Hotel" + hotelname + " not found !");
+            throw new IllegalArgumentException("Hotel" + hotelname + " not found !");
         }
     }
 
@@ -102,21 +104,21 @@ public class Main {
         if (hotel != null) {
             return hotel.getRating();
         } else {
-           throw new IllegalArgumentException("Hotel " + hotelname + " not found ");
+            throw new IllegalArgumentException("Hotel " + hotelname + " not found ");
         }
 
     }
 
     public String findCheapestHotel(String startDate, String endDate, boolean isReward) {
 
-    LocalDate date1;
-    LocalDate date2 ;
-try{
-    date1 = LocalDate.parse(startDate);
-    date2 = LocalDate.parse(endDate);
-}catch (DateTimeParseException e){
-    throw new IllegalArgumentException("Invalid date format. Please use yyyy-mm-dd");
-}
+        LocalDate date1;
+        LocalDate date2;
+        try {
+            date1 = LocalDate.parse(startDate);
+            date2 = LocalDate.parse(endDate);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid date format. Please use yyyy-mm-dd");
+        }
         if (!isReward && hotels.isEmpty()) {
             throw new IllegalStateException("No hotels available for regular customers");
         } else if (isReward && hotels.isEmpty()) {
@@ -135,17 +137,15 @@ try{
                     if (isReward) {
                         totalRate += hotel.getTotalRate("Weekend", 1, true);
 
-                    }
-                    else{
+                    } else {
                         totalRate += hotel.getTotalRate("Weekend", 1, false);
 
                     }
-                }else {
-                    if(isReward){
+                } else {
+                    if (isReward) {
                         totalRate += hotel.getTotalRate("Weekday", 1, true);
 
-                    }
-                    else {
+                    } else {
                         totalRate += hotel.getTotalRate("Weekday", 1, false);
 
                     }
@@ -170,53 +170,34 @@ try{
         try {
             date1 = LocalDate.parse(startDate);
             date2 = LocalDate.parse(endDate);
-        } catch(DateTimeParseException e){
+        } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid date format. Please use yyyy-mm-dd");
         }
 
         if (hotels.isEmpty()) {
             throw new IllegalStateException("No hotels available.");
         }
-
-        int maxRating = 0;
-        String bestHotel = "";
-        int bestTotalRate = Integer.MAX_VALUE;
-
-        for (Hotel hotel : hotels.values()) {
-            int totalRate = 0;
-
-            for (LocalDate date = date1; !date.isAfter(date2); date = date.plusDays(1)) {
-                DayOfWeek dayOfWeek = date.getDayOfWeek();
-                if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
-                    if (isReward) {
-                        totalRate += hotel.getTotalRate("Weekend", 1, true);
-
+        return hotels.values().stream()
+                .min((hotel1, hotel2) -> {
+                    int totalRateHotel1 = calculateTotalRate(hotel1, date1, date2, true);
+                    int totalRateHotel2 = calculateTotalRate(hotel2, date1, date2, true);
+                    if (totalRateHotel1 != totalRateHotel2) {
+                        return Integer.compare(totalRateHotel1, totalRateHotel2);
+                    } else {
+                        return Integer.compare(hotel2.getRating(), hotel1.getRating());
                     }
-                    else{
-                        totalRate += hotel.getTotalRate("Weekend", 1, false);
+                })
+                .map(hotel -> hotel.getname() + " with rating " + hotel.getRating() + " and rate " + calculateTotalRate(hotel, date1, date2, true))
+                .orElseThrow(() -> new IllegalStateException("No hotels available."));
+    }
 
-                    }
-                }else {
-                    if(isReward){
-                        totalRate += hotel.getTotalRate("Weekday", 1, true);
-
-                    }
-                    else {
-                        totalRate += hotel.getTotalRate("Weekday", 1, false);
-
-                    }
-
-
-                }
-            }
-
-            if (hotel.getRating() > maxRating || (hotel.getRating() == maxRating && totalRate < bestTotalRate)) {
-                maxRating = hotel.getRating();
-                bestHotel = hotel.getname();
-                bestTotalRate = totalRate;
-            }
-        }
-        return "The best rated hotel is " + bestHotel + " with rating " + maxRating + " and with total rate " + bestTotalRate;
+    private int calculateTotalRate(Hotel hotel, LocalDate startDate, LocalDate endDate, boolean isReward) {
+        return startDate.datesUntil(endDate.plusDays(1))
+                .mapToInt(date -> {
+                    DayOfWeek dayOfWeek = date.getDayOfWeek();
+                    return hotel.getTotalRate(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY ? "Weekend" : "Weekday", 1, isReward);
+                })
+                .sum();
     }
 
 
@@ -251,18 +232,14 @@ try{
 
         Hotel lakewood = sc.hotels.get("Lakewood");
         if (lakewood != null) {
-            System.out.println("Reward rate for Lakewood is " + lakewood.getrewardrates()+lakewood.getRegularrates());
+            System.out.println("Reward rate for Lakewood is " + lakewood.getrewardrates() + lakewood.getRegularrates());
         }
 
 
         String startDate = "2020-09-11";
         String endDate = "2020-09-12";
 
-        System.out.println(sc.bestratinghotel(startDate, endDate,true));  //checking for reward customer
-        System.out.println(sc.bestratinghotel(startDate, endDate,false)); // checking for regular customer
-
-        System.out.println(sc.findCheapestHotel(startDate, endDate,true));  //checking for reward customer
-        System.out.println(sc.findCheapestHotel(startDate, endDate,false)); //checking for regular customer
+        System.out.println(sc.bestratinghotel(startDate, endDate, true));  //checking for reward customer
 
 
     }
