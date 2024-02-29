@@ -200,6 +200,34 @@ public class Main {
                 .sum();
     }
 
+    public String Bestratinghotelreular(String startDate, String endDate, boolean isReward) {
+        LocalDate date1, date2;
+        try {
+            date1 = LocalDate.parse(startDate);
+            date2 = LocalDate.parse(endDate);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid date format. Please use yyyy-mm-dd");
+        }
+
+        if (hotels.isEmpty()) {
+            throw new IllegalStateException("No hotels available.");
+        }
+
+        return hotels.values().stream()
+                .min((hotel1, hotel2) -> {
+                    int totalRateHotel1 = calculateTotalRate(hotel1, date1, date2, false);
+                    int totalRateHotel2 = calculateTotalRate(hotel2, date1, date2, false);
+                    if (totalRateHotel1 != totalRateHotel2) {
+                        return Integer.compare(totalRateHotel1, totalRateHotel2);
+                    } else {
+                        return Integer.compare(hotel2.getRating(), hotel1.getRating());
+                    }
+                })
+                .map(hotel -> hotel.getname() + " with rating " + hotel.getRating() + " and rate " +
+                        calculateTotalRate(hotel, date1, date2, false))
+                .orElseThrow(() -> new IllegalStateException("No hotels available."));
+    }
+
 
     public static void main(String[] args) {
         System.out.println("Welcome to Hotel Reservation Program ");
@@ -230,17 +258,12 @@ public class Main {
         sc.setRatings("Bridgewood", 4);
         sc.setRatings("Ridgewood", 5);
 
-        Hotel lakewood = sc.hotels.get("Lakewood");
-        if (lakewood != null) {
-            System.out.println("Reward rate for Lakewood is " + lakewood.getrewardrates() + lakewood.getRegularrates());
-        }
-
 
         String startDate = "2020-09-11";
         String endDate = "2020-09-12";
 
         System.out.println(sc.bestratinghotel(startDate, endDate, true));  //checking for reward customer
-
+        System.out.println(sc.Bestratinghotelreular(startDate, endDate, false)); // checking for regular customer
 
     }
 }
