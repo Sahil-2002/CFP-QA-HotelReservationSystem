@@ -33,7 +33,7 @@ public class MainTest {
         sc.setregularrates("Ridgewood", "Weekday", 220);
         String startDate = "2020-09-10";
         String endDate = "2020-09-11";
-        String hotel = sc.findCheapestHotel(startDate, endDate);
+        String hotel = sc.findCheapestHotel(startDate, endDate, false);
         assertEquals("Lakewood total rates 220", hotel);
     }
 
@@ -71,7 +71,7 @@ public class MainTest {
 
         String startDate = "2020-09-11";
         String endDate = "2020-09-12";
-        String hotel = sc.findCheapestHotel(startDate, endDate);
+        String hotel = sc.findCheapestHotel(startDate, endDate,false);
         assertEquals("Bridgewood total rates 200", hotel);
     }
 
@@ -114,7 +114,7 @@ public class MainTest {
         String startDate = "2020-09-11";
         String endDate = "2020-09-12";
 
-        String hotel = sc.findCheapestHotel(startDate, endDate);
+        String hotel = sc.findCheapestHotel(startDate, endDate,false);
         assertEquals("Bridgewood total rates 200", hotel);
         assertEquals(4, sc.getRating("Bridgewood"));
 
@@ -142,8 +142,8 @@ public class MainTest {
 
         String startDate = "2020-09-11";
         String endDate = "2020-09-12";
-        sc.bestratinghotel(startDate, endDate);
-        assertEquals("The best rated hotel is Ridgewood with rating 5 and with total rate 370", sc.bestratinghotel(startDate, endDate));
+        sc.bestratinghotel(startDate, endDate,false);
+        assertEquals("The best rated hotel is Ridgewood with rating 5 and with total rate 370", sc.bestratinghotel(startDate, endDate,false));
     }
 
     @Test //8
@@ -168,5 +168,39 @@ public class MainTest {
 
 
     }
+    @Test //9
 
+    public void cheapestbestratedforreward(){
+        Main sc = new Main();
+        sc.addhotel("Lakewood");
+        sc.addhotel("Bridgewood");
+        sc.addhotel("Ridgewood");
+
+        sc.setregularrates("Lakewood", "Weekday", 110);
+        sc.setregularrates("Bridgewood", "Weekday", 150);
+        sc.setregularrates("Ridgewood", "Weekday", 220);
+
+        sc.setregularrates("Lakewood", "Weekend", 90);
+        sc.setregularrates("Bridgewood", "Weekend", 50);
+        sc.setregularrates("Ridgewood", "Weekend", 150);
+
+        sc.setRewardrates("Lakewood", "Weekday", 80);
+        sc.setRewardrates("Bridgewood", "Weekday", 110);
+        sc.setRewardrates("Ridgewood", "Weekday", 100);
+
+        sc.setRewardrates("Lakewood", "Weekend", 80);
+        sc.setRewardrates("Bridgewood", "Weekend", 50);
+        sc.setRewardrates("Ridgewood", "Weekend", 40);
+
+
+        sc.setRatings("Lakewood", 3);
+        sc.setRatings("Bridgewood", 4);
+        sc.setRatings("Ridgewood", 5);
+
+        String startDate = "2020-09-11";
+        String endDate = "2020-09-12";
+        sc.bestratinghotel(startDate,endDate,true);
+assertEquals("The best rated hotel is Ridgewood with rating 5 and with total rate 140",sc.bestratinghotel(startDate,endDate,true));
+
+    }
 }
